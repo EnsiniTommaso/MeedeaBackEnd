@@ -37,8 +37,9 @@ async function LogInUser(email, password) {
       auth,
       email,
       password
-    );
-    const IdToken = userCredential.user.getIdToken();
+    )
+    const newUser = await userCredential
+    const IdToken = newUser.user.getIdToken();
     return [IdToken, null];
   } catch (error) {
     const errorCode = error.code;
