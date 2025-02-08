@@ -7,7 +7,15 @@ import {
 } from "firebase/auth";
 import "dotenv/config";
 import admin from 'firebase-admin'
-import serviceAccount from 
+
+
+var serviceAccount = await import(process.env.fb_key_file, { with: { type: "json" } });
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount.default)
+});
+
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -35,4 +43,5 @@ export {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  admin
 };

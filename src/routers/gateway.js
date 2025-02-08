@@ -4,7 +4,7 @@ import queryTheDB from "../services/QueryTheDB.js";
 import loadNChannels from "../services/LoadNChannels.js";
 import createNewUser from "../services/CreateNewUser.js";
 import logIn from "../services/LogIn.js";
-import TestAuth from "../services/Auth.js";
+import TestAuth from "../services/TestAuth.js";
 
 const router = Router();
 
