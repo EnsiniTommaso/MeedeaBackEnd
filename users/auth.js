@@ -6,6 +6,7 @@ const resp = await fetch(
 
 const body = await resp.json();
 const keys = [];
+
 for (const key in body) {
   keys.push(key);
 }

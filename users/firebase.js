@@ -6,24 +6,6 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import "dotenv/config";
-import admin from 'firebase-admin'
-
-
-var serviceAccount = await import(process.env.fb_key_file, { with: { type: "json" } });
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount.default)
-});
-
-
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-if (!process.env.MODE)
-  console.error('[ERROR] .env not found')
 
 const firebaseConfig = {
   apiKey: process.env.fb_apiKey,
@@ -35,13 +17,55 @@ const firebaseConfig = {
   measurementId: process.env.fb_measurementId,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export {
-  app,
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  admin
-};
+
+async function CreateNewUser(email, password) {
+  if (!email) return [null, "need emai"]; //returns 'undefined'
+  if (!password) return [null, "need password"];
+
+  const auth = getAuth(app);
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    return [user, null];
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error(`[${errorCode}] ${errorMessage}`);
+    return [null, errorCode];
+  }
+}
+
+async function LogInUser(email, password) {
+  if (!email) return [null, '[ERROR] LogInUser: need email'];
+  if (!password) return [null, '[ERROR] LogInUser: need password'];
+
+  const auth = getAuth(app);
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    )
+    const newUser = await userCredential
+    const IdToken = newUser.user.getIdToken();
+    return [IdToken, null];
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error(`[${errorCode}] ${errorMessage}`);
+    return [null, errorCode];
+  }
+}
+
+async function RemoveUser(){
+  //https://github.com/firebase/snippets-node/blob/e29c2c3ced6c1a3cb14ad5ab7588dac578c06453/auth/manage_users.js
+}
+
+export { CreateNewUser, LogInUser };

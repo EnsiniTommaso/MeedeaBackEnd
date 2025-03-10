@@ -16,6 +16,9 @@ una garanzia per gestire chiamate limitate in numero - ruolo di cors*/
 app.use(auth);
 app.use(channels);
 
+
+
+
 app.listen(process.env.PORT || port, process.env.IP || nip, () => {
   console.log(`Gateway running at http://localhost:${port}`);
 });

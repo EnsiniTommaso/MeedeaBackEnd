@@ -3,6 +3,7 @@ import "dotenv/config";
 
 if (!process.env.MODE) console.error("[ERROR] .env not found");
 else console.log(process.env.MODE);
+
 const db_config = {
   user: process.env.user,
   password: process.env.password,
